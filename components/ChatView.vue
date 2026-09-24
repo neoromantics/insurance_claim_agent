@@ -177,7 +177,15 @@ async function send() {
               if (lastMsg.role === 'user' || lastMsg.phaseBanner) {
                 messages.value.push({ role: 'assistant', content: '', time: formatTime() })
               }
-              messages.value[messages.value.length - 1].content += data.chunk
+              
+              const targetMsg = messages.value[messages.value.length - 1]
+              // If this is the start of the message, trim any leading newlines/spaces from the AI
+              if (targetMsg.content.length === 0) {
+                targetMsg.content += data.chunk.trimStart()
+              } else {
+                targetMsg.content += data.chunk
+              }
+              
               scrollBottom()
             }
             
