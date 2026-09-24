@@ -1,0 +1,41 @@
+# Comprehensive SOP Test Sequence for Margaret Chen
+# ------------------------------------------------------------------------------
+# Simply copy and paste these messages one by one into the chat interface
+# to fully test the agent's memory, boundaries, and emotional handling.
+
+# 1. INITIAL CONTACT & EARLY HINT
+# Expected behavior: Agent asks for verification and remembers the "denied claim" hint silently.
+Hi, I'm calling about my denied healthcare claim from January.
+
+# 2. PARTIAL VERIFICATION & FRUSTRATION
+# Expected behavior: Agent extracts name (1/3 pieces), acknowledges the frustration, but firmly requires 2 more ID pieces.
+My name is Margaret Chen. Why was it denied? I need to know now.
+
+# 3. SOP RECOVERY (Refusal to verify)
+# Expected behavior: Agent de-escalates, explains why verification is legally required to protect privacy, and offers acceptable alternative ID fields.
+I already told you who I am. This is ridiculous. Just tell me why my claim was denied immediately.
+
+# 4. COMPLETING VERIFICATION
+# Expected behavior: Agent verifies the 3 pieces (Name, DOB, SSN). 
+# Crucially, it should use its memory of the very first message to instantly pull up the "denied healthcare claim from January" WITHOUT asking "How can I help you today?".
+Fine. DOB is 1985-03-15, and my SSN last four is 4472.
+
+# 5. IN-SCOPE GROUNDED QUESTION
+# Expected behavior: Agent answers using the exact database grounds for Case ID CASE-HC-1002 (e.g., out-of-network provider).
+So why exactly was the claim denied?
+
+# 6. OUT OF SCOPE BOUNDARY TESTING
+# Expected behavior: Agent politely declines to answer the irrelevant question and steers the conversation back to insurance.
+Okay, that makes sense. By the way, can you explain what Reinforcement Learning (RL) is?
+
+# 7. PROCESS CASE & NEXT STEPS
+# Expected behavior: Agent looks up the required documents for the appeal and the deadline.
+Alright, ignore that. What specific documents do I need to submit an appeal?
+
+# 8. TRANSITION TO POST_PROCESS
+# Expected behavior: Agent realizes the core issue is resolved, transitions to POST_PROCESS, and asks if Margaret wants an email summary.
+Thanks, I have the documents. That's all I need today.
+
+# 9. FINAL CONSENT
+# Expected behavior: Agent confirms the email will be sent and formally closes the conversation.
+Yes, please send the email summary.
