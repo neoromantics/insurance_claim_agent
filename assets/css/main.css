@@ -1,0 +1,52 @@
+/* =============================================================================
+   iMessage-style global CSS
+   ============================================================================= */
+
+:root {
+  --bg: #ffffff;
+  --bg-secondary: #f2f2f7;
+  --bubble-user: #007aff;
+  --bubble-agent: #e9e9eb;
+  --text-primary: #000000;
+  --text-secondary: #8e8e93;
+  --text-on-blue: #ffffff;
+  --text-on-grey: #000000;
+  --border: #c6c6c8;
+  --input-bg: #f2f2f7;
+  --phase-active: #007aff;
+  --phase-done: #34c759;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #000000;
+    --bg-secondary: #1c1c1e;
+    --bubble-user: #0a84ff;
+    --bubble-agent: #2c2c2e;
+    --text-primary: #ffffff;
+    --text-secondary: #8e8e93;
+    --text-on-blue: #ffffff;
+    --text-on-grey: #ffffff;
+    --border: #38383a;
+    --input-bg: #1c1c1e;
+    --phase-active: #0a84ff;
+    --phase-done: #30d158;
+  }
+}
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body, #__nuxt {
+  height: 100%;
+  background: var(--bg);
+  color: var(--text-primary);
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}

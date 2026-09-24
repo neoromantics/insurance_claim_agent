@@ -1,0 +1,11 @@
+node_modules/
+dist/
+.output/
+.nuxt/
+.env
+*.db
+*.sqlite
+*-shm
+*-wal
+*.log
+.DS_Store

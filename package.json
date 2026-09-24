@@ -1,0 +1,32 @@
+{
+  "name": "insurance-sop-agent",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "nuxt dev",
+    "build": "nuxt build",
+    "start": "node .output/server/index.mjs",
+    "preview": "nuxt preview",
+    "seed": "tsx server/db/seed.ts",
+    "zip": "zip -r insurance_agent_submission.zip . -x 'node_modules/*' -x '.git/*' -x '.nuxt/*' -x '.output/*' -x '.env'"
+  },
+  "dependencies": {
+    "@langchain/core": "^1.2.12",
+    "@langchain/langgraph": "^1.4.17",
+    "@langchain/openai": "^1.5.13",
+    "better-sqlite3": "^11.7.0",
+    "langchain": "^1.5.12",
+    "nanoid": "^5.1.0",
+    "nuxt": "^3.16.0",
+    "openai": "^4.82.0",
+    "vue": "^3.5.0",
+    "vue-router": "^4.5.0",
+    "zod": "^3.24.0"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.13",
+    "tsx": "^4.19.0",
+    "typescript": "^5.7.0"
+  }
+}
