@@ -262,11 +262,6 @@ export async function processMessageStreamLangChain(
     const llmWithTools = primaryWithTools.withFallbacks({ fallbacks: [fallbackWithTools] });
     
     const messagesToRun = [new SystemMessage(systemPromptFor(session)), ...langchainMessages];
-    
-    // Add newline gap for multiple loops visually
-    if (loopCount > 1) {
-      controller.enqueue(new TextEncoder().encode(`data: ${JSON.stringify({ chunk: '\n\n' })}\n\n`));
-    }
 
     const stream = await llmWithTools.stream(messagesToRun);
     let aiMessage: any = null;
