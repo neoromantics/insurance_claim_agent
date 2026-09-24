@@ -65,11 +65,10 @@
           class="input"
           placeholder="iMessage"
           rows="1"
-          :disabled="loading"
           @keydown.enter.exact.prevent="send"
           @input="autoGrow"
         />
-        <button class="send-btn" :disabled="!input.trim() || loading" @click="send">
+        <button class="send-btn" :disabled="!input.trim() || isStreaming" @click="send">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
             <path d="M3.478 2.404a.75.75 0 0 0-.926.941l2.432 7.905H13.5a.75.75 0 0 1 0 1.5H4.984l-2.432 7.905a.75.75 0 0 0 .926.94 60.519 60.519 0 0 0 18.445-8.986.75.75 0 0 0 0-1.218A60.517 60.517 0 0 0 3.478 2.404Z"/>
           </svg>
@@ -101,6 +100,7 @@ const INITIAL_GREETING = "Hello! I'm your claims support assistant. To protect y
 const messages = ref<Msg[]>([])
 const input = ref('')
 const loading = ref(false)
+const isStreaming = ref(false)
 const sessionId = ref<string | null>(null)
 const phase = ref('VERIFY_ID')
 const verificationStatus = ref('pending')
@@ -128,7 +128,7 @@ function autoGrow() {
 
 async function send() {
   const text = input.value.trim()
-  if (!text || loading.value) return
+  if (!text || isStreaming.value) return
 
   input.value = ''
   nextTick(autoGrow)
@@ -136,6 +136,7 @@ async function send() {
   messages.value.push({ role: 'user', content: text, time: formatTime() })
   scrollBottom()
   loading.value = true
+  isStreaming.value = true
 
   const config = useRuntimeConfig()
   const base = config.app.baseURL === '/' ? '' : config.app.baseURL.replace(/\/$/, '')
@@ -171,19 +172,17 @@ async function send() {
             const data = JSON.parse(dataStr)
             
             if (data.chunk) {
-              loading.value = false // hide dots once text starts
               const lastMsg = messages.value[messages.value.length - 1]
-              // If we don't have an active assistant text bubble, create one
-              if (lastMsg.role === 'user' || lastMsg.phaseBanner) {
-                messages.value.push({ role: 'assistant', content: '', time: formatTime() })
-              }
+              const needsNewBubble = (lastMsg.role === 'user' || lastMsg.phaseBanner)
               
-              const targetMsg = messages.value[messages.value.length - 1]
-              // If this is the start of the message, trim any leading newlines/spaces from the AI
-              if (targetMsg.content.length === 0) {
-                targetMsg.content += data.chunk.trimStart()
+              if (needsNewBubble) {
+                // Ignore invisible chunks before we even create the bubble!
+                if (!data.chunk.trimStart()) continue;
+                
+                loading.value = false // hide dots once actual text starts
+                messages.value.push({ role: 'assistant', content: data.chunk.trimStart(), time: formatTime() })
               } else {
-                targetMsg.content += data.chunk
+                messages.value[messages.value.length - 1].content += data.chunk
               }
               
               scrollBottom()
@@ -219,6 +218,7 @@ async function send() {
     })
   } finally {
     loading.value = false
+    isStreaming.value = false
     scrollBottom()
     nextTick(() => inputRef.value?.focus())
   }
