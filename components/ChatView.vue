@@ -152,8 +152,6 @@ async function send() {
     const reader = response.body.getReader()
     const decoder = new TextDecoder()
     
-    messages.value.push({ role: 'assistant', content: '', time: formatTime() })
-    
     let currentPhase = phase.value
     let doneReading = false
 
@@ -173,6 +171,12 @@ async function send() {
             const data = JSON.parse(dataStr)
             
             if (data.chunk) {
+              loading.value = false // hide dots once text starts
+              const lastMsg = messages.value[messages.value.length - 1]
+              // If we don't have an active assistant text bubble, create one
+              if (lastMsg.role === 'user' || lastMsg.phaseBanner) {
+                messages.value.push({ role: 'assistant', content: '', time: formatTime() })
+              }
               messages.value[messages.value.length - 1].content += data.chunk
               scrollBottom()
             }
@@ -184,9 +188,6 @@ async function send() {
               })
               currentPhase = data.phase_transition
               phase.value = currentPhase
-              
-              // Start a new message bubble for the new phase
-              messages.value.push({ role: 'assistant', content: '', time: formatTime() })
             }
             
             if (data.done) {
