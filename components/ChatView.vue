@@ -137,8 +137,11 @@ async function send() {
   scrollBottom()
   loading.value = true
 
+  const config = useRuntimeConfig()
+  const base = config.app.baseURL === '/' ? '' : config.app.baseURL.replace(/\/$/, '')
+
   try {
-    const response = await fetch('/api/chat', {
+    const response = await fetch(`${base}/api/chat`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ sessionId: sessionId.value, message: text }),
@@ -225,9 +228,12 @@ onMounted(async () => {
   inputRef.value?.focus()
   const savedId = localStorage.getItem('sop_session_id')
   
+  const config = useRuntimeConfig()
+  const base = config.app.baseURL === '/' ? '' : config.app.baseURL.replace(/\/$/, '')
+
   if (savedId) {
     try {
-      const res = await $fetch<any>(`/api/session/${savedId}`)
+      const res = await $fetch<any>(`${base}/api/session/${savedId}`)
       sessionId.value = res.sessionId
       phase.value = res.phase
       verificationStatus.value = res.verificationStatus
